@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đánh Giá Năng Lực Lãnh Đạo - PATI Group</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 3px solid #10b981;
+        }
+
+        h1 {
+            color: #1a1a1a;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar-container {
+            background: #e5e5e5;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #10b981, #059669);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e5e5;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        .question-container {
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question-box {
+            background: #f8f8f8;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #10b981;
+        }
+
+        .question-number {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            color: #1a1a1a;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+
+        .option.selected {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+
+        .option input[type="radio"] {
+            margin-top: 3px;
+            cursor: pointer;
+            accent-color: #10b981;
+        }
+
+        .option-label {
+            flex: 1;
+            font-size: 14px;
+            color: #1a1a1a;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+        }
+
+        .btn-secondary {
+            background: #e5e5e5;
+            color: #1a1a1a;
+        }
+
+        .btn-secondary:hover {
+            background: #d4d4d4;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .result-card {
+            background: #f8f8f8;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .competency-name {
+            font-weight: 700;
+            color: #1a1a1a;
+            font-size: 15px;
+        }
+
+        .result-scores {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .score-box {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .score-actual {
+            background: #10b981;
+            color: white;
+        }
+
+        .score-standard {
+            background: #e5e5e5;
+            color: #666;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pass {
+            background: #ecfdf5;
+            color: #10b981;
+        }
+
+        .status-gap {
+            background: #fef3c7;
+            color: #f59e0b;
+        }
+
+        .level-1 { border-left-color: #ef4444; }
+        .level-2 { border-left-color: #f59e0b; }
+        .level-3 { border-left-color: #10b981; }
+        .level-4 { border-left-color: #3b82f6; }
+        .level-5 { border-left-color: #8b5cf6; }
+
+        .summary-box {
+            background: #10b981;
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .summary-box h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .summary-box p {
+            font-size: 15px;
+            opacity: 0.95;
+        }
+
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e5e5e5;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #googleSheetScript {
+            background: #1a1a1a;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        .script-header {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ĐÁNH GIÁ NĂNG LỰC LÃNH ĐẠO</h1>
+            <div class="subtitle">PATI Group - 12 Năng lực Cốt lõi</div>
+            <div class="subtitle">48 câu hỏi | Thời gian: ~30 phút</div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">Phần 1: Thông tin cá nhân</div>
+
+        <!-- SECTION 1: THÔNG TIN CÁ NHÂN -->
+        <div id="section-info" class="question-container active">
+            <div class="question-box">
+                <div class="question-number">THÔNG TIN CÁ NHÂN</div>
+                
+                <div class="form-group">
+                    <label for="fullName">Họ và tên *</label>
+                    <input type="text" id="fullName" placeholder="Nhập họ và tên đầy đủ" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="team">Team / Bộ phận *</label>
+                    <input type="text" id="team" placeholder="VD: Performance, Creative, Operations..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="level">Cấp bậc hiện tại *</label>
+                    <select id="level" required>
+                        <option value="">-- Chọn cấp bậc --</option>
+                        <option value="Manager">Manager</option>
+                        <option value="C-Level">C-Level</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <div></div>
+                <button class="btn btn-primary" onclick="startAssessment()">Bắt đầu làm bài →</button>
+            </div>
+        </div>
+
+        <!-- SECTION 2-4: CÂU HỎI (sẽ được generate bởi JavaScript) -->
+        <div id="questionsContainer"></div>
+
+        <!-- RESULTS SECTION -->
+        <div id="results" class="results-container"></div>
+    </div>
+
+    <script>
+        // ==================== DATA ====================
+        const QUESTIONS = [
+    {
+        id: 1,
+        competency: "THIẾT LẬP MỤC TIÊU",
+        text: "CEO công bố mục tiêu năm nay là x20 revenue (từ x1 lên x20). Là Head of Performance, bạn sẽ thiết lập mục tiêu cho team Meta Ads như thế nào?",
+        options: [
+            "Họp team thông báo: \"Công ty cần tăng trưởng gấp 20 lần, chúng ta cùng cố gắng\"",
+            "Đặt luôn mục tiêu Meta Ads tăng x20 revenue, chia đều 4 quý mỗi quý x5",
+            "Tính contribution hiện tại của Meta Ads vào tổng revenue, đặt mục tiêu dựa trên baseline và growth potential",
+            "Phân tích từng market (US/EU), tính CAC và LTV, đặt mục tiêu tăng trưởng khác nhau cho từng geo",
+            "Xây bảng mục tiêu có nhiều kịch bản tăng trưởng, tính cả budget cần thiết và điểm nghẽn có thể gặp",
+        ]
+    },
+    {
+        id: 2,
+        competency: "THIẾT LẬP MỤC TIÊU",
+        text: "Q2 team bạn có 3 mục tiêu: tăng 50% new customers, giữ ROAS >3.5, giảm 30% CPA. Bạn nhận thấy 3 mục tiêu này conflict nhau. Bạn sẽ làm gì?",
+        options: [
+            "Push team cố gắng đạt cả 3, vì mục tiêu đã được đặt ra thì phải hoàn thành",
+            "Chọn tập trung vào new customers vì đây là mục tiêu quan trọng nhất cho tăng trưởng",
+            "Tính toán lại, báo cáo CEO rằng 3 mục tiêu này không tương thích, đề xuất điều chỉnh",
+            "Chia theo priority: New customers ưu tiên 1, ROAS ưu tiên 2, CPA flexible trong khoảng chấp nhận được",
+            "Thiết lập dashboard theo dõi cả 3 metrics real-time, điều chỉnh bidding strategy tuần theo performance data",
+        ]
+    },
+    {
+        id: 3,
+        competency: "THIẾT LẬP MỤC TIÊU",
+        text: "Bạn cần đặt mục tiêu cho Creative Team trong Q2. Team hiện làm được 80 creative mỗi tháng. Bạn sẽ đặt mục tiêu như thế nào?",
+        options: [
+            "\"Làm thật nhiều creative chất lượng cao để support campaigns tốt hơn\"",
+            "\"Tăng từ 80 creative/tháng lên 100 creative/tháng, đảm bảo deliver đúng deadline\"",
+            "\"Sản xuất 100 creative/tháng với tỷ lệ winner (CTR >2%) đạt tối thiểu 15%\"",
+            "\"Giảm cost per creative xuống 30% nhưng tăng conversion rate từ creative lên 25%\"",
+            "\"Xây dashboard tracking creative performance theo real-time, optimize sản lượng dựa trên ROI từng format\"",
+        ]
+    },
+    {
+        id: 4,
+        competency: "THIẾT LẬP MỤC TIÊU",
+        text: "Team Meta Ads đặt mục tiêu \"Tăng revenue Q2\". Để mục tiêu này đạt chuẩn SMART, bạn cần bổ sung thông tin gì?",
+        options: [
+            "Thêm \"Tăng revenue Q2 bằng mọi cách, không được fail\"",
+            "Thêm \"Tăng revenue Q2 lên 500 triệu, deadline 30/6, người chịu trách nhiệm là Performance Lead\"",
+            "Thêm \"Tăng revenue Q2 nếu có đủ budget và creative tốt\"",
+            "Thêm \"Tăng revenue Q2 cao nhất có thể so với Q1\"",
+            "Thêm \"Tăng revenue Q2 theo chỉ đạo của CEO\"",
+        ]
+    },
+    {
+        id: 5,
+        competency: "LẬP KẾ HOẠCH",
+        text: "Bạn được giao launch supplement brand mới tại thị trường US trong 3 tháng. Bạn bắt đầu lập kế hoạch bằng cách nào?",
+        options: [
+            "Họp team brainstorm ý tưởng campaign, creative concept, sau đó bắt tay vào làm",
+            "List các công việc cần làm (creative, ads setup, compliance), chia đều 3 tháng, assign người làm",
+            "Vẽ roadmap theo tuần, milestone rõ ràng (tuần 1: research, tuần 4: creative ready...), check progress weekly",
+            "Phân tích công việc nào phụ thuộc công việc nào, tính timing từng step, dự phòng 20% buffer cho delay",
+            "Lập 3 kịch bản (best case launch sớm, worst case delay, base case), align với Legal và Supply chain team",
+        ]
+    },
+    {
+        id: 6,
+        competency: "LẬP KẾ HOẠCH",
+        text: "Launch campaign dự kiến 12 tuần. Tuần 4 bạn nhận ra tiến độ mới 20% thay vì 33%. Nguyên nhân: creative approval chậm. Bạn xử lý thế nào?",
+        options: [
+            "Push creative team làm nhanh hơn, yêu cầu approval trong 2 ngày thay vì 1 tuần",
+            "Báo CEO và đề xuất lùi launch thêm 3-4 tuần để đủ thời gian",
+            "Phân tích bottleneck ở đâu (brief unclear? Review process dài?), fix process, reallocate resource vào creative",
+            "Replan lại timeline với baseline mới, đàm phán giảm số lượng creative hoặc chấp nhận launch nhỏ hơn",
+            "Kích hoạt plan B sẵn có: dùng creative template có sẵn, hoặc launch US-West trước rồi expand East sau",
+        ]
+    },
+    {
+        id: 7,
+        competency: "LẬP KẾ HOẠCH",
+        text: "Bạn cần lập kế hoạch scale team Meta Ads từ 5 người lên 15 người trong 12 tháng. Bạn sẽ làm như thế nào?",
+        options: [
+            "List ra những skill cần tuyển, tuyển dần mỗi tháng 1-2 người cho đủ 15",
+            "Đặt mục tiêu tháng 12 có 15 người, tuyển và train dần trong năm",
+            "Vẽ hiring roadmap theo quý (Q1 tuyển 3, Q2 tuyển 4...), chuẩn bị onboarding plan, review mỗi quý",
+            "Lập OKR theo quý (Q1: Build senior team, Q2: Scale junior...), track metrics như time-to-hire, retention",
+            "Plan 3 năm: Năm 1 build 15 people, Năm 2 build team leads, Năm 3 scale to 50, có scenario nếu budget bị cắt",
+        ]
+    },
+    {
+        id: 8,
+        competency: "LẬP KẾ HOẠCH",
+        text: "Team đặt OKR cho Q2: Objective \"Trở thành #1 supplement brand ở US\". Key Results nào dưới đây HỢP LÝ nhất?",
+        options: [
+            "KR1: Làm việc chăm chỉ hơn. KR2: Launch nhiều sản phẩm mới. KR3: Tăng team size lên 20 người",
+            "KR1: Đạt top 3 bestseller trên Amazon Health category. KR2: 50,000 orders. KR3: ROAS >4.0",
+            "KR1: Thử 100 creative mới. KR2: Chạy ads trên 5 platform. KR3: Gửi 1000 sản phẩm cho influencer",
+            "KR1: CEO hài lòng với kết quả. KR2: Không có khách hàng complain. KR3: Văn phòng mới đẹp hơn",
+            "KR1: Học thêm về marketing. KR2: Đi benchmark competitor. KR3: Tham gia 3 hội thảo ngành",
+        ]
+    },
+    {
+        id: 9,
+        competency: "TỔ CHỨC BỘ MÁY",
+        text: "Team Performance đang scale từ 5 lên 15 người để phục vụ x20 revenue. Nhiều việc chồng chéo (ai cũng làm creative, ai cũng chạy ads). Bạn tổ chức lại thế nào?",
+        options: [
+            "Giữ nguyên structure linh hoạt hiện tại, ai rảnh làm việc nấy, phối hợp tốt là được",
+            "Chia 3 nhóm: Media Buying (5 người), Creative (5 người), Affiliate (5 người), mỗi nhóm độc lập",
+            "Vẽ org chart rõ ràng, mỗi người có role cụ thể (Senior Media Buyer, Creative Lead...), viết JD từng vị trí",
+            "Thiết kế theo workflow thực tế: Research → Creative → Media → Optimization, xác định ai làm gì ở bước nào",
+            "Build cả functional structure (by skill) và project structure (by market), ma trận ai report cho ai trong từng project",
+        ]
+    },
+    {
+        id: 10,
+        competency: "TỔ CHỨC BỘ MÁY",
+        text: "Phân tích team, bạn phát hiện: (1) Không ai theo dõi competitor ads (gap), (2) 3 người cùng làm reporting (overlap). Bạn xử lý như thế nào?",
+        options: [
+            "Giao competitor analysis cho người ít việc nhất, về reporting thì để 1 người làm là đủ",
+            "Tuyển thêm 1 người chuyên competitor intelligence, cho 2 người đang làm reporting chuyển sang việc khác",
+            "Map lại toàn bộ công việc team, thiết kế lại job scope, đảm bảo mỗi task có 1 owner rõ ràng",
+            "Dùng RACI matrix để define ai Responsible-Accountable-Consulted-Informed cho mỗi công việc",
+            "Redesign end-to-end workflow, tối ưu handoff points, build shared reporting service để tự động hóa thay vì manual",
+        ]
+    },
+    {
+        id: 11,
+        competency: "TỔ CHỨC BỘ MÁY",
+        text: "Team hiện 10 người, workload tăng 50% do scale. Bạn đang cân nhắc giữa: tuyển thêm 5 người vs dùng AI để tăng năng suất. Bạn quyết định thế nào?",
+        options: [
+            "Tuyển thêm 5 người ngay vì AI chưa đủ tin cậy, con người vẫn tốt nhất",
+            "Thử dùng AI tools miễn phí (ChatGPT, Midjourney), nếu thấy OK thì không cần tuyển",
+            "Phân tích công việc nào AI làm được (creative generation, reporting), nào cần con người, tính ROI mỗi option",
+            "Pilot AI cho 20% workload, đo productivity gain, tính chính xác cần bao nhiêu headcount sau khi có AI",
+            "Thiết kế hybrid model: tuyển 2 AI-savvy seniors để lead, dùng AI scale output, optimize cost per acquisition",
+        ]
+    },
+    {
+        id: 12,
+        competency: "TỔ CHỨC BỘ MÁY",
+        text: "Team bạn chuẩn bị launch campaign mới. Bạn dùng RACI matrix. Creative Lead là \"R\" (Responsible). Vậy bạn - Head of Performance - nên là gì?",
+        options: [
+            "Cũng là \"R\" để cùng làm creative với Creative Lead",
+            "Là \"A\" (Accountable) - người chịu trách nhiệm cuối cùng về kết quả campaign",
+            "Là \"C\" (Consulted) - người được hỏi ý kiến khi Creative Lead cần",
+            "Là \"I\" (Informed) - người được thông báo khi creative xong",
+            "Không cần có trong RACI vì đã có Creative Lead lo rồi",
+        ]
+    },
+    {
+        id: 13,
+        competency: "XÂY DỰNG QUY TRÌNH",
+        text: "Creative team review creative rất mất thời gian: mỗi creative qua 5 người review, mất 3 ngày. Bạn muốn cải thiện. Bạn sẽ làm gì?",
+        options: [
+            "Yêu cầu mọi người review nhanh hơn, deadline review là 1 ngày thay vì 3 ngày",
+            "Giảm số người review từ 5 xuống 2 người để nhanh hơn",
+            "Viết SOP rõ ràng: ai review gì, theo thứ tự nào, tiêu chí pass/fail ra sao, dùng checklist chuẩn",
+            "Dùng AI pre-screen creative trước (check compliance, brand guideline), con người chỉ review final approval",
+            "Build approval workflow tự động: AI check → Auto-approve nếu pass → Human review chỉ khi AI flag issue",
+        ]
+    },
+    {
+        id: 14,
+        competency: "XÂY DỰNG QUY TRÌNH",
+        text: "Quy trình creative chuẩn: Brief (2 ngày) → Design (3 ngày) → Review (2 ngày) = 7 ngày. Nhưng có case urgent cần creative trong 1 ngày. Bạn làm gì?",
+        options: [
+            "Giữ nguyên quy trình 7 ngày, case urgent cũng phải chờ để đảm bảo chất lượng",
+            "Làm ngoại lệ cho case urgent: skip brief, skip review, designer làm luôn trong 1 ngày",
+            "Thiết kế quy trình \"Fast track\" riêng: Brief 2h, Design 4h, Review 2h, rõ criteria nào được dùng fast track",
+            "Xây quy trình có branching logic: Nếu urgent = True thì route qua Fast track, nếu False thì Standard process",
+            "Chuẩn bị sẵn creative template library, case urgent chỉ cần customize template thay vì làm từ đầu",
+        ]
+    },
+    {
+        id: 15,
+        competency: "XÂY DỰNG QUY TRÌNH",
+        text: "Quy trình launch campaign của team mất 14 ngày, competitor chỉ mất 7 ngày. Leadership yêu cầu cải thiện. Bạn sẽ làm sao?",
+        options: [
+            "Yêu cầu team làm việc nhanh gấp đôi để từ 14 ngày xuống 7 ngày",
+            "Loại bỏ một số bước trong quy trình (ví dụ: skip compliance check) để rút ngắn thời gian",
+            "Vẽ lại toàn bộ process map, xác định bước nào mất thời gian nhất, tìm cách optimize từng bước",
+            "Phân tích value-add vs non-value-add activities, loại bỏ waste, chạy song song thay vì tuần tự nếu được",
+            "Benchmark quy trình của competitor (nếu được), pilot test quy trình mới với 1 campaign nhỏ trước khi áp dụng rộng",
+        ]
+    },
+    {
+        id: 16,
+        competency: "XÂY DỰNG QUY TRÌNH",
+        text: "Team bạn có 10 quy trình làm việc. Cách nào tốt nhất để document và quản lý 10 quy trình này?",
+        options: [
+            "Viết vào 10 file Word riêng lẻ, lưu trong folder chung trên Google Drive",
+            "Mỗi người nhớ quy trình của mình, không cần viết ra vì ai cũng đã biết",
+            "Dùng tool như Notion/Confluence, có categorize, search được, version control, dễ update",
+            "In ra giấy dán tường để mọi người nhìn thấy mỗi ngày",
+            "Làm slide PowerPoint cho đẹp, present 1 lần trong onboarding là đủ",
+        ]
+    },
+    {
+        id: 17,
+        competency: "ĐẢM BẢO NGUỒN LỰC",
+        text: "Bạn cần lập media budget cho năm tới. Năm nay team xài 10 tỷ VNĐ, đạt 50 tỷ revenue (ROAS = 5x). Bạn lập budget như thế nào?",
+        options: [
+            "Xin 10 tỷ như năm nay vì con số này đã quen và an toàn",
+            "Xin 12 tỷ (tăng 20%) để có dư dả cho năm tới, phòng khi cần tăng chi",
+            "Tính toán: để đạt x20 revenue (1000 tỷ), với ROAS 5x cần 200 tỷ budget, đề xuất roadmap tăng dần",
+            "Phân tích ROI từng kênh (Meta, Google, TikTok), reallocate budget từ kênh kém sang kênh tốt, đề xuất tổng số optimal",
+            "Scenario planning: Best case (ROAS 6x) cần X, Worst case (ROAS 3x) cần Y, đề xuất flexible budget theo performance",
+        ]
+    },
+    {
+        id: 18,
+        competency: "ĐẢM BẢO NGUỒN LỰC",
+        text: "Giữa Q2, team phát hiện nếu tăng thêm 50tr budget vào Meta Ads sẽ tăng 200tr revenue. Nhưng budget Q2 đã hết. Bạn làm gì?",
+        options: [
+            "Chấp nhận bỏ lỡ cơ hội vì budget đã hết, chờ sang Q3",
+            "Email CFO xin duyệt thêm 50tr vì đây là cơ hội tốt",
+            "Viết business case: Chi 50tr, thu 200tr, ROI 4x, rủi ro thấp, đề xuất approval",
+            "Đề xuất cut budget từ kênh khác đang kém hiệu quả (Google chỉ ROAS 2x) để shift sang Meta",
+            "Tính NPV và payback period, so sánh với các investment opportunities khác, pitch như 1 investment decision",
+        ]
+    },
+    {
+        id: 19,
+        competency: "ĐẢM BẢO NGUỒN LỰC",
+        text: "Phân tích thấy team 10 người nhưng workload thực tế chỉ tương đương 7 FTE (Full-time Equivalent). Leadership hỏi: có nên cut 3 người không?",
+        options: [
+            "Đồng ý cut 3 người để tối ưu chi phí, giữ lại 7 người làm việc",
+            "Không cut, thay vào đó tìm thêm việc cho 3 người đó làm",
+            "Phân tích tại sao idle: mùa thấp điểm? Skill mismatch? Rồi quyết định giữ hay cut",
+            "Forecast workload 6 tháng tới, nếu sẽ cần đủ 10 người thì giữ, nếu chỉ cần 7 thì restructure",
+            "Thiết kế shared service model: 3 người đó support thêm team khác (Creative, Affiliate), optimize utilization toàn công ty",
+        ]
+    },
+    {
+        id: 20,
+        competency: "ĐẢM BẢO NGUỒN LỰC",
+        text: "Team Meta Ads track 15 metrics mỗi ngày (Impressions, Clicks, CTR, CPC, ROAS, Revenue, Orders...). Bạn muốn dashboard chỉ hiện 3-5 KPIs quan trọng nhất. Bạn chọn gì?",
+        options: [
+            "Impressions, Clicks, CTR (metrics dễ hiểu nhất)",
+            "Revenue, Orders, ROAS (outcome metrics quan trọng nhất)",
+            "CPC, CPM, Frequency (cost metrics để control chi phí)",
+            "Tất cả đều quan trọng, không thể bỏ metric nào, phải track cả 15",
+            "Tùy campaign: Brand awareness → Impressions/Reach, Performance → ROAS/CAC",
+        ]
+    },
+    {
+        id: 21,
+        competency: "KIỂM SOÁT & RỦI RO",
+        text: "Team đang chạy song song 5 campaigns lớn cho 5 sản phẩm khác nhau. Bạn cần track performance. Bạn thiết lập hệ thống báo cáo thế nào?",
+        options: [
+            "Hỏi từng Media Buyer khi cần biết campaign nào đang chạy thế nào",
+            "Yêu cầu mọi người report qua Slack channel mỗi khi có update quan trọng",
+            "Weekly meeting 1h, mỗi campaign báo cáo 10 phút về performance, issues, next steps",
+            "Dashboard real-time với traffic light (Xanh = On track, Vàng = At risk, Đỏ = Issue), daily standup 15 phút",
+            "Automated dashboard pull data từ Meta/Google, alert tự động khi ROAS < threshold, async update qua Slack",
+        ]
+    },
+    {
+        id: 22,
+        competency: "KIỂM SOÁT & RỦI RO",
+        text: "Campaign lớn nhất tháng này target 500tr revenue. Làm sao để phát hiện sớm nếu campaign có nguy cơ miss target?",
+        options: [
+            "Chờ đến ngày 25 của tháng xem revenue đạt bao nhiêu, nếu chưa đủ thì push sprint cuối tháng",
+            "Check revenue mỗi tuần, nếu tuần nào không đạt thì nhắc team cố gắng hơn",
+            "Track daily revenue, nếu ngày nào dưới target (500tr/30 ngày = 16.7tr/ngày) thì escalate ngay",
+            "Track leading indicators (CTR, CPA trend, ad fatigue score) + revenue hàng ngày, forecast cuối tháng sẽ đạt bao nhiêu",
+            "Build predictive model dựa trên historical data, Monte Carlo simulation xác suất đạt target, adjust strategy real-time",
+        ]
+    },
+    {
+        id: 23,
+        competency: "KIỂM SOÁT & RỦI RO",
+        text: "Campaign phụ thuộc vào 1 creative agency external. Nếu agency delay delivery creative, campaign trượt deadline. Bạn quản trị rủi ro này ra sao?",
+        options: [
+            "Tin agency sẽ deliver đúng hạn vì họ đã commit, không cần lo",
+            "Nhắc agency thường xuyên về deadline và theo dõi sát",
+            "Có creative team internal backup, nếu agency delay quá 2 ngày thì switch sang internal team làm",
+            "Contract với penalty clause nếu delay, có 2 agencies để hedge risk, check progress hàng ngày",
+            "Multi-tier backup: Agency A primary, Agency B backup, Internal team last resort, creative template ready nếu cần",
+        ]
+    },
+    {
+        id: 24,
+        competency: "KIỂM SOÁT & RỦI RO",
+        text: "Risk Register (Danh sách rủi ro) của dự án thường chứa thông tin gì?",
+        options: [
+            "Tên các nhân viên có nguy cơ nghỉ việc trong dự án",
+            "Danh sách competitor đang chạy ads tương tự",
+            "Các rủi ro tiềm ẩn, xác suất xảy ra, mức độ impact, kế hoạch giảm thiểu",
+            "Lịch sử các lỗi đã xảy ra trong quá khứ để tránh lặp lại",
+            "Budget dự phòng cho trường hợp chi phí vượt mức",
+        ]
+    },
+    {
+        id: 25,
+        competency: "",
+        text: "Team cần tuyển Senior Media Buyer để scale campaigns. Bạn bắt đầu tuyển dụng bằng cách nào?",
+        options: [
+            "Search \"Senior Media Buyer JD\" trên Google, copy JD đầu tiên, post lên job board",
+            "Hỏi HR viết JD dựa trên title \"Senior Media Buyer\", rồi phỏng vấn ai apply",
+            "Phân tích gap hiện tại (thiếu skill gì? Cần handle workload nào?), viết JD rõ responsibilities & requirements",
+            "Define competency matrix (phải giỏi Meta Ads, data analysis, creative strategy), chuẩn bị case study thực tế để test",
+            "Talent mapping: identify top performers ở competitor, headhunt direct, có EVP (Employee Value Proposition) hấp dẫn",
+        ]
+    },
+    {
+        id: 26,
+        competency: "",
+        text: "Phỏng vấn ứng viên Senior Media Buyer, bạn muốn test khả năng problem-solving. Bạn sẽ đánh giá bằng cách nào?",
+        options: [
+            "Hỏi: \"Bạn có giỏi giải quyết vấn đề không? Kể cho tôi nghe.\"",
+            "Hỏi: \"Bạn đã từng giải quyết campaign nào khó không?\" rồi nghe họ kể",
+            "Hỏi STAR: \"Kể 1 lần campaign fail, bạn làm gì? (Situation-Task-Action-Result)\"",
+            "Cho case study: \"Campaign ROAS giảm từ 5x xuống 2x trong 3 ngày, bạn debug và fix như thế nào?\" - 30 phút",
+            "Case study + Behavioral interview + Reference check hỏi cụ thể \"Candidate đã xử lý crisis X như thế nào?\"",
+        ]
+    },
+    {
+        id: 27,
+        competency: "",
+        text: "2 ứng viên Senior Media Buyer cuối cùng: A (Kỹ năng 9/10, nhưng thích làm 1 mình, ít chia sẻ). B (Kỹ năng 7/10, teamwork tốt, fit văn hóa Solver/Builder). Bạn chọn ai?",
+        options: [
+            "Chọn A vì skill là quan trọng nhất, văn hóa có thể coaching được",
+            "Chọn B vì culture fit quan trọng hơn, skill có thể training",
+            "Đánh giá role này cần gì hơn: Individual contributor hay Team lead? Quyết định dựa trên đó",
+            "Deep dive thêm: A \"ít chia sẻ\" có toxic không hay chỉ introverted? Có thể adapt được không?",
+            "Nhìn team composition: Team đang thiếu skill hay thiếu culture carrier? Balance portfolio",
+        ]
+    },
+    {
+        id: 28,
+        competency: "",
+        text: "Competency-based interview khác với Traditional interview như thế nào?",
+        options: [
+            "Competency-based hỏi về năng lực, Traditional hỏi về kinh nghiệm",
+            "Competency-based dùng câu hỏi tình huống STAR, Traditional hỏi chung chung về quá khứ",
+            "Competency-based dành cho senior role, Traditional cho junior role",
+            "Competency-based cần training interviewer, Traditional ai cũng phỏng vấn được",
+            "Competency-based mất nhiều thời gian hơn, Traditional nhanh hơn",
+        ]
+    },
+    {
+        id: 29,
+        competency: "ĐÀO TẠO & KÈM CẶP",
+        text: "Junior Media Buyer mới vào 2 tháng, setup campaign sai target audience lần thứ 3, waste 10tr budget. Bạn xử lý như thế nào?",
+        options: [
+            "Phê bình nghiêm khắc để người đó biết sai và không dám sai lần 4",
+            "Tự mình setup lại campaign, từ giờ mọi campaign phải qua bạn approve mới được launch",
+            "Ngồi lại hướng dẫn từng bước setup audience targeting, cho làm lại dưới sự giám sát của bạn",
+            "1-on-1 session: tìm hiểu nguyên nhân (không hiểu product? Không biết ICP?), training targeted, follow-up weekly",
+            "Root cause analysis: Onboarding thiếu sót? Doc không rõ? Fix hệ thống (checklist, peer review), không chỉ fix cá nhân",
+        ]
+    },
+    {
+        id: 30,
+        competency: "ĐÀO TẠO & KÈM CẶP",
+        text: "Có 1 Junior Media Buyer rất tiềm năng. Bạn muốn phát triển người này lên Senior trong 18 tháng. Bạn sẽ làm gì?",
+        options: [
+            "Giao cho người đó nhiều campaign khó hơn để học hỏi qua thực chiến",
+            "Cho đi học các khóa về Meta Ads, Google Ads, Data Analytics",
+            "Lập IDP (Individual Development Plan) với roadmap rõ: tháng 1-6 master Meta, tháng 7-12 lead small campaigns...",
+            "IDP + Mentoring 1-1 bi-weekly + Stretch assignments (lead 1 campaign lớn) + 360 feedback mỗi quý",
+            "Career pathing: rotate qua Creative để hiểu full funnel, coach theo 70-20-10 (70% on-job, 20% mentor, 10% training)",
+        ]
+    },
+    {
+        id: 31,
+        competency: "ĐÀO TẠO & KÈM CẶP",
+        text: "Senior Media Buyer làm việc chăm chỉ (10h/ngày) nhưng campaigns liên tục underperform (ROAS 2x khi target 4x). Bạn cần feedback. Bạn nói thế nào?",
+        options: [
+            "\"Em làm việc chăm chỉ nhưng kết quả chưa tốt, cần cải thiện nhé.\"",
+            "Không nói thẳng vì sợ demotivate, hint nhẹ nhàng qua chat",
+            "\"3 campaigns em handle đều ROAS 2x, dưới target 4x. Anh sẽ hỗ trợ em analyze và optimize như thế này...\"",
+            "\"Campaign X ROAS 2x, em đã thử A/B test creative chưa? Chúng ta ngồi review data và tìm root cause nhé.\"",
+            "Coaching conversation: \"Em thấy tại sao ROAS thấp? (Skill gap? Strategy issue?)\" → Co-create action plan cùng nhau",
+        ]
+    },
+    {
+        id: 32,
+        competency: "ĐÀO TẠO & KÈM CẶP",
+        text: "70-20-10 Learning Model trong phát triển nhân viên có nghĩa là gì?",
+        options: [
+            "70% lương cố định, 20% bonus, 10% benefits",
+            "70% thời gian làm việc bình thường, 20% làm dự án, 10% nghỉ ngơi",
+            "70% học qua làm việc thực tế, 20% học từ mentor/đồng nghiệp, 10% học qua training chính thức",
+            "70% nhân viên giỏi, 20% trung bình, 10% yếu (performance distribution)",
+            "70% skill cứng, 20% skill mềm, 10% văn hóa công ty",
+        ]
+    },
+    {
+        id: 33,
+        competency: "",
+        text: "Cuối Q2, bạn cần đánh giá performance của Senior Media Buyer. Bạn sẽ đánh giá dựa trên gì?",
+        options: [
+            "Ấn tượng chung của bạn về người đó trong Q2",
+            "Nhớ lại những campaign gần đây nhất họ làm tốt hay không tốt",
+            "So sánh KPIs đầu quý vs cuối quý (ROAS target 4x, actual 4.2x = exceed), cộng với feedback từ team",
+            "Weekly 1-1 notes suốt Q2 + KPI data + Peer feedback + Self-assessment của nhân viên",
+            "Performance data + So sánh với peers (calibration session với other managers), 9-box grid mapping",
+        ]
+    },
+    {
+        id: 34,
+        competency: "",
+        text: "Team vừa close Q2 thành công, exceed target 120%. Bạn muốn ghi nhận và motivate team cho Q3. Bạn làm gì?",
+        options: [
+            "Email toàn team: \"Cảm ơn mọi người đã cố gắng. Good job Q2!\"",
+            "Tổ chức team dinner ăn mừng, thư giãn sau quarter vất vả",
+            "All-hands meeting: Công bố thành tích team, highlight ai đóng góp gì cụ thể, tặng bonus",
+            "Personalized recognition (biết từng người motivated bởi gì) + Public praise + Monetary reward + Clear goals Q3",
+            "Retro session: Celebrate wins, document learnings (why thành công?), apply vào Q3, build team confidence",
+        ]
+    },
+    {
+        id: 35,
+        competency: "",
+        text: "Junior Media Buyer liên tục underperform sau 3 tháng coaching. ROAS target 3.5x, actual 2x. PIP (Performance Improvement Plan) 60 ngày cũng không cải thiện. Bạn làm gì?",
+        options: [
+            "Cho thêm cơ hội 60 ngày nữa vì sa thải rất khó",
+            "Sa thải ngay vì đã cho đủ cơ hội, giữ lại chỉ kéo team xuống",
+            "Extend PIP thêm 30 ngày với support sát sao hơn, nếu vẫn không được thì offboard",
+            "Đánh giá: Wrong role hay can\'t do? Có position khác phù hợp hơn không? Nếu không, respectful offboarding",
+            "So sánh với team: Junior khác onboard cùng thời gian perform thế nào? Fair assessment, document đầy đủ, offboard professionally",
+        ]
+    },
+    {
+        id: 36,
+        competency: "",
+        text: "PIP (Performance Improvement Plan) được dùng khi nào và mục đích là gì?",
+        options: [
+            "Dùng khi nhân viên giỏi để plan cho họ lên chức",
+            "Dùng khi nhân viên underperform, mục đích cải thiện hoặc document lý do sa thải",
+            "Dùng cho mọi nhân viên đầu năm để set goals",
+            "Dùng khi nhân viên xin nghỉ việc để retain họ lại",
+            "Dùng khi công ty muốn tăng lương cho nhân viên xuất sắc",
+        ]
+    },
+    {
+        id: 37,
+        competency: "GIAO TIẾP",
+        text: "Bạn cần giao task \"optimize campaign X\" cho Media Buyer. Bạn sẽ giao việc như thế nào?",
+        options: [
+            "\"Em optimize campaign X giúp anh, cần gấp nhé.\"",
+            "\"Em optimize campaign X, deadline thứ 6 tuần này, có gì hỏi anh.\"",
+            "\"Campaign X đang ROAS 2.5x, target 4x. Em optimize để đạt target, deadline thứ 6, deliverable là action plan.\"",
+            "\"Context: Campaign X underperform. Objective: ROAS 4x. Success criteria: Sustain 4x trong 3 ngày. Deadline: Thứ 6. Resources: Budget thêm 20tr nếu cần.\"",
+            "\"Why cần optimize (CEO hỏi) → What (ROAS 2.5→4x) → How (A/B test creative+audience) → When (Thứ 6) → Check-in (daily standup)\"",
+        ]
+    },
+    {
+        id: 38,
+        competency: "GIAO TIẾP",
+        text: "Cần meeting với 8 người (Performance, Creative, Affiliate) để quyết định strategy Q3. Bạn tổ chức meeting thế nào?",
+        options: [
+            "Schedule meeting 1h, mọi người ngồi lại brainstorm, rồi vote chọn strategy",
+            "Gửi agenda trước 1 ngày, trong meeting discuss, cuối meeting ra decision",
+            "Pre-read (Q2 performance data) gửi 2 ngày trước, agenda rõ, time-box từng phần, notes + action items sau meeting",
+            "Align với key stakeholders trước meeting (Creative Head, Affiliate Lead), meeting chỉ để finalize, có decision framework rõ",
+            "Pre-alignment → Meeting decision → Follow-up comms (email summary + Slack announcement) → Check-in next week",
+        ]
+    },
+    {
+        id: 39,
+        competency: "GIAO TIẾP",
+        text: "CEO cho bạn 10 phút present kết quả Q2. Target x5 revenue, actual x4.2 (84% of target). Bạn sẽ present như thế nào?",
+        options: [
+            "Kể chi tiết từ đầu Q2: tháng 4 làm gì, tháng 5 gặp vấn đề gì, tháng 6 xử lý thế nào...",
+            "Trình bày các con số KPI: Revenue, ROAS, CAC, Orders... rồi giải thích",
+            "Slide 1: Q2 đạt x4.2 (miss 16%), nguyên nhân CPA tăng 30%. Slide 2: Action plan Q3. Slide 3: Ask for X budget.",
+            "Executive summary (1 slide): Đạt 84% target do Y, Q3 sẽ Z → Deep dive data (2 slides) → Clear ask",
+            "Story: \"Q2 we scaled fast (good) nhưng CPA spike (bad), fixed bằng creative refresh (action), Q3 confident hit x5 (resolution). Ask: Approve 30tr budget.\"",
+        ]
+    },
+    {
+        id: 40,
+        competency: "GIAO TIẾP",
+        text: "STAR framework trong communication/interview dùng để làm gì?",
+        options: [
+            "Đánh giá nhân viên theo 4 level: Starter-Trainee-Advanced-Rock star",
+            "Cấu trúc trả lời câu hỏi: Situation-Task-Action-Result",
+            "Ưu tiên công việc: Strategic-Tactical-Administrative-Routine",
+            "Feedback model: Specific-Timely-Actionable-Respectful",
+            "Meeting agenda: Start-Topics-Actions-Review",
+        ]
+    },
+    {
+        id: 41,
+        competency: "TRUYỀN CẢM HỨNG",
+        text: "Q2 miss target (x4 thay vì x5), leadership cắt 30% budget Q3, team lo lắng job security. Bạn communicate với team thế nào?",
+        options: [
+            "Không nói gì để tránh gây hoang mang, cứ làm việc bình thường",
+            "\"Tình hình khó nhưng chúng ta cố gắng làm tốt hơn Q3.\"",
+            "Transparent: \"Q2 miss do X, budget Q3 bị cắt, nhưng công ty stable. Chúng ta focus vào efficiency, job an toàn.\"",
+            "\"Q2 là lesson về scaling too fast. Q3 là cơ hội prove chúng ta làm được MORE with LESS. Challenge nhưng doable.\"",
+            "Vulnerability + Vision: \"Anh cũng lo (honest), nhưng anh tin team này (confidence). Đây là test của Builder DNA. Q3 ta sẽ prove resilience.\"",
+        ]
+    },
+    {
+        id: 42,
+        competency: "TRUYỀN CẢM HỨNG",
+        text: "Bạn được promote lên Head of Performance, quản lý 20 người. First all-hands meeting, bạn cần truyền tải vision. Bạn làm gì?",
+        options: [
+            "Email announcement: \"Mình là Head mới, mọi người cứ làm việc như bình thường.\"",
+            "Kick-off meeting: slide về mục tiêu 2025 (x20 revenue), plan từng quý, Q&A",
+            "Share vision rõ ràng: \"2025 ta sẽ #1 DTC supplement US\", roadmap, role của mỗi người, mở Q&A",
+            "Storytelling: \"Tưởng tượng 1 năm sau: PATI top 3 Amazon Health, team 50 người, mỗi người lead 1 market. Đó là vision. Roadmap là...\"",
+            "Vision → Mission → Values alignment (Integrity/Solver/Builder), cascading workshop để mọi người co-create OKRs, make it personal",
+        ]
+    },
+    {
+        id: 43,
+        competency: "TRUYỀN CẢM HỨNG",
+        text: "Bạn vừa communicate với team về Builder DNA: \"Chúng ta không ngại thử nghiệm, fail fast, learn fast\". Nhưng 1 Media Buyer test chiến lược mới, fail, loss 15tr. Bạn phản ứng thế nào?",
+        options: [
+            "Mắng nhân viên đó vì đã làm loss 15tr, nhắc nhở cẩn thận hơn lần sau",
+            "Bỏ qua vì 15tr không lớn lắm, tiếp tục encourage experimentation",
+            "1-1 session: \"Experiment tốt, nhưng setup test như thế nào? Learning gì? Document lại để team học.\"",
+            "Transparent với team: \"X test và fail 15tr. Đây là cost of learning. Lesson learned: A, B, C. Ai cũng được phép test, nhưng có hypothesis + limit.\"",
+            "Retro công khai: X share why test, what went wrong, learning. Celebrate courage to try. Codify: Test framework (hypothesis, budget cap, success criteria)",
+        ]
+    },
+    {
+        id: 44,
+        competency: "TRUYỀN CẢM HỨNG",
+        text: "Transformational Leadership tập trung vào điều gì?",
+        options: [
+            "Transform cấu trúc tổ chức (org restructure)",
+            "Thay đổi mindset và inspire nhân viên vì mission lớn hơn, không chỉ KPI",
+            "Digital transformation (chuyển đổi số)",
+            "Dùng reward/punishment để drive performance",
+            "Transform công ty từ startup thành corporate",
+        ]
+    },
+    {
+        id: 45,
+        competency: "CHUYÊN MÔN TIÊN PHONG",
+        text: "Campaign iOS 14.5+ tracking limited, performance drop 40%. Không ai trong team biết fix. Bạn - Head of Performance - sẽ làm gì?",
+        options: [
+            "Hire agency chuyên iOS 14.5 để fix problem này",
+            "Nhờ team Performance khác trong ngành (bạn bè) tư vấn",
+            "Research solution (Server-side tracking, Conversion API), tự implement, rồi training team",
+            "Cùng team research, test solutions, document learnings, build internal playbook",
+            "Bring external expert (consultant/workshop), co-solve với team, transfer knowledge, build long-term capability",
+        ]
+    },
+    {
+        id: 46,
+        competency: "CHUYÊN MÔN TIÊN PHONG",
+        text: "Bạn muốn team luôn ahead of curve về Meta Ads trends. Bạn sẽ làm gì?",
+        options: [
+            "Khuyến khích mọi người tự research khi rảnh",
+            "Share articles hay vào Slack channel khi thấy",
+            "Tổ chức learning session monthly, mỗi người research 1 topic mới chia sẻ",
+            "Subscribe paid reports (eMarketer), attend conferences, knowledge sharing routine, benchmark competitors monthly",
+            "Dùng AI (ChatGPT/Claude) tổng hợp trends weekly, team pilot test new features, publish learnings (internal blog/LinkedIn)",
+        ]
+    },
+    {
+        id: 47,
+        competency: "CHUYÊN MÔN TIÊN PHONG",
+        text: "Bạn thấy AI tool mới (VD: Generative AI for ad creative) có thể reduce creative cost 50%. Chưa ai trong công ty dùng. Bạn làm gì?",
+        options: [
+            "Chờ tool này mature hơn, rồi mới thử",
+            "Research tool, nếu thấy OK thì dùng luôn cho team",
+            "Pilot test với 1 campaign nhỏ, đo ROI, nếu work thì scale",
+            "Business case (cost 50tr/năm, save 200tr creative cost, ROI 4x), proof of concept, phased rollout",
+            "Innovation pipeline: Scout AI tools → Evaluate → POC → Build vs Buy analysis → Scale + Train team → Thought leadership (publish case study)",
+        ]
+    },
+    {
+        id: 48,
+        competency: "CHUYÊN MÔN TIÊN PHONG",
+        text: "Bạn nhận ra chỉ 20% team biết dùng AI hiệu quả (ChatGPT, Claude, Midjourney), 80% còn lại chưa tận dụng. Bạn làm gì?",
+        options: [
+            "Để tự nhiên, ai muốn học AI thì tự học",
+            "Gửi link khóa học AI cho team tự học",
+            "Tổ chức workshop \"AI for Marketers\" 2h, demo use cases, encourage practice",
+            "Build AI playbook (prompt library for common tasks), train team hands-on, track adoption, recognize power users",
+            "AI-first culture: Mandatory AI fluency, integrate AI vào daily workflow, measure productivity gain, team share best prompts weekly",
+        ]
+    },
+];
+
+        // Mapping chuẩn theo ảnh đã gửi
+        const STANDARDS = {
+            "Manager": {
+                "Thiết lập Mục tiêu": 4,
+                "Lập Kế hoạch": 4,
+                "Tổ chức Bộ máy": 3,
+                "Xây dựng Quy trình": 3,
+                "Đảm bảo Nguồn lực": 4,
+                "Kiểm soát & Rủi ro": 4,
+                "Tuyển dụng": 4,
+                "Đào tạo & Kèm cặp": 4,
+                "Đánh giá & Khích lệ": 4,
+                "Giao tiếp": 4,
+                "Truyền cảm hứng": 4,
+                "Chuyên môn Tiên phong": 4
+            },
+            "C-Level": {
+                "Thiết lập Mục tiêu": 5,
+                "Lập Kế hoạch": 4,
+                "Tổ chức Bộ máy": 4,
+                "Xây dựng Quy trình": 4,
+                "Đảm bảo Nguồn lực": 5,
+                "Kiểm soát & Rủi ro": 4,
+                "Tuyển dụng": 5,
+                "Đào tạo & Kèm cặp": 5,
+                "Đánh giá & Khích lệ": 5,
+                "Giao tiếp": 5,
+                "Truyền cảm hứng": 5,
+                "Chuyên môn Tiên phong": 5
+            }
+        };
+
+        // ==================== STATE ====================
+        let currentSection = 'info';
+        let answers = {};
+        let userInfo = {};
+
+        // ==================== FUNCTIONS ====================
+        function startAssessment() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const team = document.getElementById('team').value.trim();
+            const level = document.getElementById('level').value;
+
+            if (!fullName || !team || !level) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            userInfo = { fullName, team, level };
+            
+            document.getElementById('section-info').classList.remove('active');
+            renderQuestions();
+            showSection(1);
+            updateProgress();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            const sections = [
+                { id: 1, questions: QUESTIONS.slice(0, 16) },
+                { id: 2, questions: QUESTIONS.slice(16, 32) },
+                { id: 3, questions: QUESTIONS.slice(32, 48) }
+            ];
+
+            sections.forEach(section => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.id = `section-${section.id}`;
+                sectionDiv.className = 'question-container';
+
+                section.questions.forEach((q, index) => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question-box';
+                    questionDiv.innerHTML = `
+                        <div class="question-number">${q.id}/48. ${q.competency}</div>
+                        <div class="question-text">${q.text}</div>
+                        <div class="options">
+                            ${q.options.map((opt, i) => `
+                                <label class="option" onclick="selectOption(${q.id}, ${i + 1}, this)">
+                                    <input type="radio" name="q${q.id}" value="${i + 1}">
+                                    <span class="option-label"><strong>${String.fromCharCode(65 + i)}.</strong> ${opt}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    `;
+                    sectionDiv.appendChild(questionDiv);
+                });
+
+                // Navigation buttons
+                const navDiv = document.createElement('div');
+                navDiv.className = 'navigation-buttons';
+                navDiv.innerHTML = `
+                    <button class="btn btn-secondary" onclick="previousSection(${section.id})" ${section.id === 1 ? 'style="visibility:hidden"' : ''}>
+                        ← Quay lại
+                    </button>
+                    <button class="btn btn-primary" onclick="${section.id === 3 ? 'submitAssessment()' : `nextSection(${section.id})`}">
+                        ${section.id === 3 ? 'Hoàn thành & Xem kết quả' : 'Tiếp theo →'}
+                    </button>
+                `;
+                sectionDiv.appendChild(navDiv);
+                container.appendChild(sectionDiv);
+            });
+        }
+
+        function selectOption(questionId, value, element) {
+            answers[questionId] = value;
+            
+            // Visual feedback
+            const parent = element.closest('.options');
+            parent.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function showSection(sectionNum) {
+            document.querySelectorAll('.question-container').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`section-${sectionNum}`).classList.add('active');
+            currentSection = sectionNum;
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSection(currentNum) {
+            showSection(currentNum + 1);
+        }
+
+        function previousSection(currentNum) {
+            showSection(currentNum - 1);
+        }
+
+        function updateProgress() {
+            const total = 48;
+            const answered = Object.keys(answers).length;
+            const percentage = currentSection === 'info' ? 0 : (answered / total) * 100;
+            
+            document.getElementById('progressBar').style.width = percentage + '%';
+            
+            let progressText = '';
+            if (currentSection === 'info') {
+                progressText = 'Phần 1: Thông tin cá nhân';
+            } else if (currentSection === 1) {
+                progressText = `Phần 2: Câu 1-16 (${answered}/48 câu đã trả lời)`;
+            } else if (currentSection === 2) {
+                progressText = `Phần 3: Câu 17-32 (${answered}/48 câu đã trả lời)`;
+            } else if (currentSection === 3) {
+                progressText = `Phần 4: Câu 33-48 (${answered}/48 câu đã trả lời)`;
+            }
+            
+            document.getElementById('progressText').textContent = progressText;
+        }
+
+        function submitAssessment() {
+            if (Object.keys(answers).length < 48) {
+                alert('Vui lòng trả lời đầy đủ 48 câu hỏi!');
+                return;
+            }
+
+            calculateResults();
+            showResults();
+        }
+
+        function calculateResults() {
+            // Calculate average score for each competency
+            const competencies = {
+                "Thiết lập Mục tiêu": [1, 2, 3, 4],
+                "Lập Kế hoạch": [5, 6, 7, 8],
+                "Tổ chức Bộ máy": [9, 10, 11, 12],
+                "Xây dựng Quy trình": [13, 14, 15, 16],
+                "Đảm bảo Nguồn lực": [17, 18, 19, 20],
+                "Kiểm soát & Rủi ro": [21, 22, 23, 24],
+                "Tuyển dụng": [25, 26, 27, 28],
+                "Đào tạo & Kèm cặp": [29, 30, 31, 32],
+                "Đánh giá & Khích lệ": [33, 34, 35, 36],
+                "Giao tiếp": [37, 38, 39, 40],
+                "Truyền cảm hứng": [41, 42, 43, 44],
+                "Chuyên môn Tiên phong": [45, 46, 47, 48]
+            };
+
+            userInfo.scores = {};
+            for (const [comp, qIds] of Object.entries(competencies)) {
+                const scores = qIds.map(id => answers[id]);
+                const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+                userInfo.scores[comp] = Math.round(avg);
+            }
+        }
+
+        function showResults() {
+            document.querySelectorAll('.question-container').forEach(el => el.style.display = 'none');
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('progressText').textContent = 'Hoàn thành đánh giá!';
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.classList.add('active');
+
+            const standard = STANDARDS[userInfo.level];
+            let passCount = 0;
+            let gapCount = 0;
+
+            let html = `
+                <div class="summary-box">
+                    <h2>KẾT QUẢ ĐÁNH GIÁ NĂNG LỰC LÃNH ĐẠO</h2>
+                    <p><strong>${userInfo.fullName}</strong> - ${userInfo.team} (${userInfo.level})</p>
+                </div>
+
+                <h3 style="margin-bottom: 20px; color: #1a1a1a;">Chi tiết 12 Năng lực:</h3>
+            `;
+
+            for (const [comp, score] of Object.entries(userInfo.scores)) {
+                const standardScore = standard[comp];
+                const isPass = score >= standardScore;
+                if (isPass) passCount++;
+                else gapCount++;
+
+                html += `
+                    <div class="result-card level-${score}">
+                        <div class="result-header">
+                            <div class="competency-name">${comp}</div>
+                            <div class="result-scores">
+                                <div class="score-box score-actual">Bạn: Level ${score}</div>
+                                <div class="score-box score-standard">Chuẩn: Level ${standardScore}</div>
+                                <div class="status-badge ${isPass ? 'status-pass' : 'status-gap'}">
+                                    ${isPass ? '✅ Đạt chuẩn' : '⚠️ Gap (cần phát triển)'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-top: 30px; padding: 20px; background: #f8f8f8; border-radius: 8px;">
+                    <h3 style="color: #1a1a1a; margin-bottom: 15px;">Tổng kết:</h3>
+                    <p style="font-size: 15px; color: #666; margin-bottom: 8px;">
+                        ✅ <strong>${passCount}/12</strong> năng lực đạt chuẩn
+                    </p>
+                    <p style="font-size: 15px; color: #666;">
+                        ⚠️ <strong>${gapCount}/12</strong> năng lực cần phát triển
+                    </p>
+                </div>
+            `;
+
+            html += generateGoogleSheetScript();
+
+            resultsDiv.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function generateGoogleSheetScript() {
+            return `
+                <div id="googleSheetScript">
+                    <div class="script-header">📊 GOOGLE APPS SCRIPT - Hướng dẫn setup Google Sheet</div>
+                    <p style="color: #10b981; margin-bottom: 15px;">Copy đoạn code dưới đây vào Google Apps Script để tự động lưu kết quả:</p>
+                    <pre style="background: #2a2a2a; padding: 15px; border-radius: 4px; overflow-x: auto;">
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  
+  var row = [
+    new Date(),
+    data.fullName,
+    data.team,
+    data.level,
+    data.scores['Thiết lập Mục tiêu'],
+    data.scores['Lập Kế hoạch'],
+    data.scores['Tổ chức Bộ máy'],
+    data.scores['Xây dựng Quy trình'],
+    data.scores['Đảm bảo Nguồn lực'],
+    data.scores['Kiểm soát & Rủi ro'],
+    data.scores['Tuyển dụng'],
+    data.scores['Đào tạo & Kèm cặp'],
+    data.scores['Đánh giá & Khích lệ'],
+    data.scores['Giao tiếp'],
+    data.scores['Truyền cảm hứng'],
+    data.scores['Chuyên môn Tiên phong']
+  ];
+  
+  sheet.appendRow(row);
+  return ContentService.createTextOutput(JSON.stringify({status: 'success'}));
+}
+                    </pre>
+                    <p style="color: #666; margin-top: 15px; font-size: 13px;">
+                        <strong>Bước 1:</strong> Tạo Google Sheet mới<br>
+                        <strong>Bước 2:</strong> Extensions → Apps Script → Paste code trên<br>
+                        <strong>Bước 3:</strong> Deploy → New deployment → Web app<br>
+                        <strong>Bước 4:</strong> Copy URL và cập nhật vào file HTML này
+                    </p>
+                </div>
+            `;
+        }
+
+        // Save to Google Sheet (placeholder - need actual deployment URL)
+        function saveToGoogleSheet() {
+            const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+            
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userInfo)
+            });
+        }
+    </script>
+</body>
+</html>
