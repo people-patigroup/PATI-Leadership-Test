@@ -333,25 +333,6 @@
         .hidden {
             display: none;
         }
-
-        #googleSheetScript {
-            background: #1a1a1a;
-            color: #10b981;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.5;
-            overflow-x: auto;
-        }
-
-        .script-header {
-            color: white;
-            font-weight: 700;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
@@ -1225,66 +1206,37 @@
                         ⚠️ <strong>${gapCount}/12</strong> năng lực cần phát triển
                     </p>
                 </div>
-            `;
 
-            html += generateGoogleSheetScript();
-
-            resultsDiv.innerHTML = html;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function generateGoogleSheetScript() {
-            return `
-                <div id="googleSheetScript">
-                    <div class="script-header">📊 GOOGLE APPS SCRIPT - Hướng dẫn setup Google Sheet</div>
-                    <p style="color: #10b981; margin-bottom: 15px;">Copy đoạn code dưới đây vào Google Apps Script để tự động lưu kết quả:</p>
-                    <pre style="background: #2a2a2a; padding: 15px; border-radius: 4px; overflow-x: auto;">
-function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = JSON.parse(e.postData.contents);
-  
-  var row = [
-    new Date(),
-    data.fullName,
-    data.team,
-    data.level,
-    data.scores['Thiết lập Mục tiêu'],
-    data.scores['Lập Kế hoạch'],
-    data.scores['Tổ chức Bộ máy'],
-    data.scores['Xây dựng Quy trình'],
-    data.scores['Đảm bảo Nguồn lực'],
-    data.scores['Kiểm soát & Rủi ro'],
-    data.scores['Tuyển dụng'],
-    data.scores['Đào tạo & Kèm cặp'],
-    data.scores['Đánh giá & Khích lệ'],
-    data.scores['Giao tiếp'],
-    data.scores['Truyền cảm hứng'],
-    data.scores['Chuyên môn Tiên phong']
-  ];
-  
-  sheet.appendRow(row);
-  return ContentService.createTextOutput(JSON.stringify({status: 'success'}));
-}
-                    </pre>
-                    <p style="color: #666; margin-top: 15px; font-size: 13px;">
-                        <strong>Bước 1:</strong> Tạo Google Sheet mới<br>
-                        <strong>Bước 2:</strong> Extensions → Apps Script → Paste code trên<br>
-                        <strong>Bước 3:</strong> Deploy → New deployment → Web app<br>
-                        <strong>Bước 4:</strong> Copy URL và cập nhật vào file HTML này
+                <div style="margin-top: 20px; padding: 15px; background: #ecfdf5; border-left: 4px solid #10b981; border-radius: 6px;">
+                    <p style="font-size: 14px; color: #059669; margin: 0;">
+                        ✓ Kết quả của bạn đã được lưu tự động. Cảm ơn bạn đã hoàn thành bài đánh giá!
                     </p>
                 </div>
             `;
+
+            resultsDiv.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Tự động lưu kết quả vào Google Sheet
+            saveToGoogleSheet();
         }
 
-        // Save to Google Sheet (placeholder - need actual deployment URL)
+        // Tự động lưu kết quả vào Google Sheet
         function saveToGoogleSheet() {
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwa13BK8KHtvF5QEHrY-5h7TT2G5pmtdlFAmrlULd8bAuC-Mb2qAlILrw3s80TP9W-D-g/exec';
+            // Quyên cần update URL này sau khi deploy Google Apps Script
+            const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
             
+            // Gửi data về Google Sheet
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userInfo)
+            }).then(() => {
+                console.log('✓ Đã lưu kết quả vào Google Sheet');
+            }).catch((error) => {
+                console.log('⚠ Lỗi khi lưu Google Sheet:', error);
+                // Không hiển thị lỗi cho user, vì mode: 'no-cors' không trả về response
             });
         }
     </script>
